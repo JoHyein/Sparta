@@ -1,0 +1,23 @@
+  
+    <style>
+        * {
+            font-family: 'Single Day', cursive;
+        }
+        
+        .mytitle {
+            color: white;
+            width: 500px;
+            height: 200px;
+            background-image: url('http://video.phinf.naver.net/20200227_223/1582800850571TOfLz_JPEG/7abdf84c-594f-11ea-9135-505dac8c3721_05.jpg');
+            background-position: left;
+            background-size: cover;
+            border-radius: 10p;
+            text-align: center;
+            padding-top: 60px;
+        }
+        
+        .wrap {
+            margin: 10px auto;
+            width: 500px
+        }
+    </style>
