@@ -6,32 +6,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Gothic&display=swap" rel="stylesheet">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-    <title>제이쿼리 연습하기 나홀로 링크 메모장 | 부트스트랩 연습하기</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <style>
+    <title>스파르타코딩클럽 | 나홀로메모장</title>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+    <!-- style -->
+    <style type="text/css">
         * {
-            font-family: 'Jua', sans-serif;
-            font-family: 'Nanum Gothic', sans-serif;
+            font-family: 'Stylish', sans-serif;
         }
         
         .wrap {
             width: 900px;
-            margin: 10px auto;
+            margin: auto;
         }
         
         .comment {
@@ -39,115 +42,95 @@
             font-weight: bold;
         }
         
-        .post-box {
+        #post-box {
             width: 500px;
             margin: 20px auto;
+            padding: 50px;
+            border: black solid;
+            border-radius: 5px;
         }
     </style>
 
     <script>
-        function order(){
-           let name = $('#order_name').val();
-           let count = $('#order_count').val();
-           let address = $('#order_address').val();
-           let phone = $('#order_phone').val();
-           
-           if(name==''){
-               alert('이름을 입력해주세요');
-               $('#order_name').focus();
-           }else if (count==''){
-               alert('수량을 입력해주세요');
-               $('#order_count').focus();
-           }else if (address==''){
-               alert('주소를 입력해주세요');
-               $('#order_address').focus();
-           }else if (phone==''){
-               alert('번호를 입력해주세요');
-               $('#order_phone').focus();
-           }
-        }
-         function q1() {
-            // 여기에 코드를 입력하세요
-            let tag = $('#names-q1'); //최적화
-            tag.empty();
-                        
+        $(document).ready(function(){
+            listing();
+        })
+        
+        function listing(){
             $.ajax({
-            type: "GET", // GET 방식으로 요청한다.
-            url: "https://api.manana.kr/exchange/rate.json,
-            data: {}, // 요청하면서 함께 줄 데이터 (GET 요청시엔 비워두세요)
-            
-            success: function(response){ // 서버에서 준 결과를 response라는 변수에 담음
-                    let data = response[];
-                    console.log(data);
-                for(let i = 0; i<data.length; i++){
-                    let money_data = data[i];
-                    let name = money_data['name'];
-                    console.log(name); // 서버에서 준 결과를 이용해서 나머지 코드를 작성                                                                  
-                    tag.append(${name});    
-                                       
-                  }
-                
+                type: "GET",
+                url: "http://spartacodingclub.shop/post",
+                data: {},
+                success: function(response){
+                     let articles = response['articles'];
+                     for(let i = 0; i<articles.length; i++){
+                         let article = articles[i];
+                         make_card(
+                             article['comment'],
+                             article['desc'],
+                             article['image'],
+                             article['title'],
+                             article['url']
+                         );
+                     }
+                }
+             })
+        }       
+        
+        function make_card(comment, desc, image, title, url){
+            let temp_html =`<div class = "card">
+            <img class="card-img-top" src="${image}" alr="Card image cap">
+                <div class="card-body">
+                  <a href="${url}" target="_blank" class="card-title">${title}</a>
+                  <p class="card-text">${desc}</p>
+                  <p class="card-text comment">${comment}</p>
+                </div>
+            </div>`;
+            $('#cards-box').append(temp_html);          
+        }
+        
+        function openclose() {
+            // none이면 안보임, block이면 보임
+            if ($('#post-box').css('display') == 'block') {
+                // 보이는 상태
+                $('#post-box').hide()
+                $('#btn-posting-box').text('포스팅박스 열기')
+            } else {
+                // 안보이는 상태
+                $('#post-box').show()
+                $('#btn-posting-box').text('포스팅박스 닫기')
             }
-            })
-         }
+        }
     </script>
+
 </head>
 
 <body>
     <div class="wrap">
-
-        <div width="900px" , align="center">
-            <img src="http://blogfiles.naver.net/MjAxODAyMDJfMTQ1/MDAxNTE3NTQ3NzAwNTQ2.yfOuNawfzcRP9tlLi4zrP7vzgWIwV9S1R_kManKuFgQg.Q4UqZLMKAH_QJnovVYH9-ovYMJjHnYSsqVXbQ3PWqXQg.JPEG.admobile21/%B3%D7%B3%D7%C4%A1%C5%B2.jpg"
-                alt="">
-        </div>
-
-        <div class="post-box">
-            <p class="h2">치킨을 먹자 <small class="text-muted"> 가격:15,000/개</small></p>
-            <label> 다양한 치킨을 만나 봅시다. 후라이드, 양념, 간장 등등 </label>
+        <div class="jumbotron">
+            <h1 class="display-4">나홀로 링크 메모장!</h1>
+            <p class="lead">중요한 링크를 저장해두고, <span>나중에</span> 볼 수 있는 공간입니다</p>
             <hr class="my-4">
+            <p class="lead">
+                <button id="btn-posting-box" onclick="openclose()" class="btn btn-primary btn-lg">포스팅박스 닫기</button>
+            </p>
         </div>
-
-        <div class="post-box">
-            <label> 달러-원 환율 :  </label>
-            <label id ="names-q1"> 과제중 </label>
+        <div class="form-post" id="post-box">
+            <div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">아티클 URL</label>
+                    <input id="post-url" class="form-control" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">간단 코멘트</label>
+                    <textarea class="form-control" rows="2"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary">기사저장</button>
+            </div>
         </div>
-
-        <div class="form-post post-box">
-            <p class="h2">주문하기 </p>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">이름</span>
-                </div>
-                <input id="order_name" type="text" class="form-control" placeholder="이름" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="inputGroupSelect01">수량</label>
-                </div>
-                <select class="custom-select" id="inputGroupSelect01">
-                    <option id="order_count" selected>수량 입력하세요</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">주소</span>
-                </div>
-                <input id="order_address" type="text" class="form-control" placeholder="주소" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">전화번호</span>
-                </div>
-                <input id="order_phone" type="text" class="form-control" placeholder="전화번호" aria-label="Username" aria-describedby="basic-addon1">
-            </div>
-            <button onclick="order()" onclick="q1()" type="submit" class="btn btn-primary">주문하기</button>
+        <div id="cards-box" class="card-columns">
+            
         </div>
-
-    </div>
-
     </div>
 </body>
 
