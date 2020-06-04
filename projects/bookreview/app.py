@@ -31,7 +31,15 @@ def write_review():
 
 @app.route('/reviews', methods=['GET'])
 def read_reviews():
-    return jsonify({'result':'success', 'msg': '이 요청은 GET!'})
+    #몽고디비에서 데이터 가져오기
+    reviews = list( # mongodb의 결과를(도큐먼트들)을 리스트로 변환
+        # {} - 검색 조건(비어있으니 모두 다 가져옴)
+        # {'_id': 0} -> _id 정보는 필요없으니 가져오지 않겠다.
+        db.reviews.find({}, {'_id': 0})
+    )
+
+    #[{'title': '테스트 책, 'author': '테스트 저자', 'review': '테스트 리뷰'}]
+    return jsonify({'result':'success', 'reviews': reviews})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
